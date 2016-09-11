@@ -1,0 +1,63 @@
+<footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2>Thank You</h2>
+                    <em>Copyright &copy; Company 2013</em>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/stylesheets/chunzahara/js/jquery-scrolltofixed-min.js"></script>
+    <script src="/stylesheets/chunzahara/js/jquery.vegas.js"></script>
+    <script src="/stylesheets/chunzahara/js/jquery.mixitup.min.js"></script>
+    <script src="/stylesheets/chunzahara/js/jquery.validate.min.js"></script>
+    <script src="/stylesheets/chunzahara/js/script.js"></script>
+    <script src="/stylesheets/chunzahara/js/bootstrap.js"></script>
+    <script>
+    $.vegas('slideshow', {
+        delay: 5000,
+        backgrounds: [
+            <% imgs.forEach(function (info, index) { %>
+                <% info.imgUrl.forEach(function (list, num) { %>
+                        {
+                            src: 'http://localhost:3000/images/<%= list.originalname %>',
+                            fade: 2000
+                        },
+                <% }) %>
+            <% }) %>
+        ]
+    })('overlay', {
+        src: '/stylesheets/chunzahara/img/overlay.png'
+    });
+    </script>
+    <script>
+    $(function() {
+        $('#Grid').mixitup();
+    });
+    </script>
+    <script>
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#nav').scrollToFixed();
+    });
+    </script>
+</body>
+
+</html>

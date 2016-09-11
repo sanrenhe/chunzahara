@@ -1,0 +1,137 @@
+<%- include chun_header %>
+<% var url = 'http://localhost:3000' %>
+    <div id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="row push50">
+                <div class="col-md-4 col-md-offset-4 text-center">
+                    <h2>衣橱</h2>
+                    <h3>
+                    <span class="filter label label-default" data-filter="all">ALL</span>
+                    <% tags.forEach(function (tag, index) { %>
+                        <% var tagName = tag.split("-")[1] %>
+                        <span class="filter label label-default" data-filter="<%= tag %>"><%= tagName %></span>
+                    <% }) %>
+                    </h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="gallery">
+                    <ul id="Grid" class="gcontainer <%= tags %>">
+                        <% imgs.forEach(function(img, index) { %>
+                            <% var tagList = "", tagType = typeof(img.tags); %>
+                            <% if (tagType != "string") { %>
+                                <% for(var i=0, j=img.tags.length; i<j; i++) { %>
+                                    <% tagList += img.tags[i] + " " %>
+                                <% } %>
+                            <% } else { %>
+                                <% tagList = img.tags %>
+                            <% } %>
+                            <li class="col-md-4 col-sm-4 col-xs-12 mix <%= tagList %> <%= img.title %>-<%= img.time.day %>" data-cat="<%= img.title %>">
+                                <a data-toggle="modal" data-target="#<%= img.title %>-<%= img.time.day %>" class="mix-cover">
+                                    <% img.imgUrl.forEach(function(info, num) { %>
+                                        <img class="horizontal" src="./images/<%= info.originalname %>" alt="<%= img.title %>">
+                                    <% }) %>
+                                    <span class="overlay"><span class="valign"></span><span class="title"><%= img.title %></span></span>
+                                </a>
+                            </li>
+                        <% }) %>
+                    </ul>
+                    <% imgs.forEach(function(img, index) { %>
+                    <div class="modal fade <%= img.title %>-<%= img.time.day %>" id="<%= img.title %>-<%= img.time.day %>" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title text-center"><%= img.title %></h4>
+                                    <% var tagList = "", tagType = typeof(img.tags); %>
+                                    <% if (tagType != "string") { %>
+                                        <% for(var i=0, j=img.tags.length; i<j; i++) { %>
+                                            <span class="label label-success"><%= img.tags[i].split("-")[1] %></span>
+                                        <% } %>
+                                    <% } else { %>
+                                        <span class="label label-success"><%= img.tags.split("-")[1] %></span>
+                                    <% } %>                                          
+                                    <div class="jumbotron">
+                                      <p><%= img.post %></p>
+                                    </div>
+                                    <a class="btn btn-primary btn-sm" href="/chun_editImage/<%= user.name %>/<%= img.time.day %>/<%= img.title %>" role="button">编辑</a> 
+                                    <a class="btn btn-danger btn-sm" href="javascript:;" role="button" data-day="<%= img.time.day %>" data-title="<%= img.title %>">删除</a>
+                                </div>
+                                <div class="modal-body">
+                                <% img.imgUrl.forEach(function(info, num) { %>
+                                <img class="thumbnail" src="./images/<%= info.originalname %>" alt="<%= img.title %>" />
+                                <% }) %>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tips" class="modal fade <%= err %>" role="dialog" aria-labelledby="modalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalLabel">操作提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认要删除该张图片吗</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary ok" data-dismiss="modal" id="delete">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" value="<%= user.name %>" name="name"></input>
+    <input type="hidden" value="" name="day"></input>
+    <input type="hidden" value="" name="title"></input>
+<script type="text/javascript">
+    var tips = function(txt) {
+        var message = $('<p style="background: rgba(0,0,0,0.5);z-index:999999; position: absolute;width: 200px;left: 50%;top: 50%;text-align: center;border-radius: 10px;padding: 10px;color: #fff" id="tips">' + txt + '</p>');
+        $('body').append(message);
+        var mes = message.get(0);
+        mes.style.WebkitTransform = 'translate(-50%, -50%)';
+        mes.style.MozTransform = 'translate(-50%, -50%)';
+        mes.style.msTransform = 'translate(-50%, -50%)';
+        mes.style.OTransform = 'translate(-50%, -50%)';
+        mes.style.transform = 'translate(-50%, -50%)';
+        window.setTimeout(function() {
+            message.remove();
+        }, 2000);
+    };
+    $(".btn-danger").click(function() {
+        $('#tips').modal('show');
+        $('input[name=day]').val($(this).data("day"));
+        $('input[name=title]').val($(this).data("title"));
+    });
+    $("#delete").click(function() {
+        $.ajax({
+            url: '/chun_select',
+            type: 'post',
+            dataType:'json',
+            data: {
+                day: $('input[name=day]').val(),
+                title: $('input[name=title]').val()
+            },
+            success: function(data) {    
+                if (data.status == "succ") {
+                    tips(data.info);
+                } else {
+                    tips(data.info);
+                }
+                window.setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        });
+    });
+</script>
+<%- include chun_footer %>
+

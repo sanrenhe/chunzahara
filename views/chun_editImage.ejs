@@ -1,0 +1,132 @@
+<%- include chun_header %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/chunzahara/css/default.css">
+    <link href="/stylesheets/chunzahara/css/fileinput.css" media="all" rel="stylesheet" type="text/css" /> 
+    <link href="/stylesheets/chunzahara/css/magicsuggest-min.css" rel="stylesheet">
+    <script src="/stylesheets/chunzahara/js/magicsuggest-min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/chunzahara/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/chunzahara/css/build.css">
+    <div id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 text-center">
+                    <h2>EditImage</h2>
+                    <hr>
+                </div>
+                <div class="col-md-5 col-md-offset-3">
+                    <form method="post" id="contact-form" class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="name">Image Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" placeholder="Your Name" class="form-control"  name="title" value="<%= img.title %>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="email">Choose Image</label>
+                                <div class="col-sm-8">
+	                                <div class="htmleaf-container">
+				                        <div class="container kv-main">
+				                            <div class="form-group">
+				                            	<div class="row">
+                									<div class="gallery">
+						                                <ul id="Grid" class="gcontainer">
+						                                	<li class="col-md-4 col-sm-4 col-xs-12 mix bw portraits all" data-cat="graphics">
+									                            <a data-toggle="modal" data-target="#portrait1" class="mix-cover">
+									                            	<% var url = 'http://localhost:3000' %>
+									                            	<% img.imgUrl.forEach(function(info, num) { %>
+									                                <img class="horizontal" src="<%= url %>/images/<%= info.originalname %>" alt="<%= img.title %>">
+									                                <% }) %>
+									                                <span class="overlay"><span class="valign"></span><span class="title"><%= img.title %></span></span>
+									                            </a>
+									                        </li>
+						                                </ul>
+						                                <div class="modal fade" id="portrait1" tabindex="-1" role="dialog" aria-hidden="true">
+									                        <div class="modal-dialog">
+									                            <div class="modal-content">
+									                                <div class="modal-header">
+									                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									                                    <h4 class="modal-title text-center"><%= img.title %></h4>
+									                                </div>
+									                                <div class="modal-body">
+									                                	<% img.imgUrl.forEach(function(info, num) { %>
+									                                    <img class="thumbnail" src="<%= url %>/images/<%= info.originalname %>" alt="<%= img.title %>" />
+									                                    <% }) %>
+									                                </div>
+									                            </div>
+									                        </div>
+									                    </div>
+						                            </div>
+						                        </div>    
+				                            </div>                     
+				                        </div>
+				                    </div>
+	                            </div>
+                            </div>        
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="message">Your Message</label>
+                                <div class="col-sm-8">
+                                    <div class="ms-ctn form-control  ms-ctn-focus" style="" id="ms1">
+                                    	<span class="ms-helper " style="display: none;"></span>
+                                    	<div class="ms-sel-ctn">
+                                    		<input type="text" class="" placeholder="Type or click here" style="width: 227px;">
+                                    		<div style="display: none;">
+                                    			
+                                    		</div>
+                                    	</div>
+                                    	<div class="ms-trigger">
+                                    		<div class="ms-trigger-ico">
+                                    			
+                                    		</div>
+                                    	</div>
+                                    </div>
+                                </div>
+                            </div>                                                	
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="message">Your Message</label>
+                                <div class="col-sm-8">
+                                    <textarea placeholder="Please Type Your Message" class="form-control" name="post" id="message" rows="3"><%= img.post %></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                                <button type="reset" class="btn btn-primary" onclick="history.go(-1)">Cancel</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <script src="/stylesheets/chunzahara/js/fileinput.js" type="text/javascript"></script>
+    <script src="/stylesheets/chunzahara/js/editor.js"></script>
+    <script>
+    $("#file-3").fileinput({
+      showUpload: false,
+      showCaption: false,
+      browseClass: "btn btn-primary btn-lg",
+      fileType: "any",
+          previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+    });
+
+      $(function() {
+      	var hasSelect = "", tags = "<%= img.tags %>".split(","), hasSelectArray = [];
+      	for (var i=0, j=tags.length; i<j; i++) {
+      		hasSelect = '{id:"' + tags[i].split("-")[0] + '", value:"' + tags[i].split("-")[1] + '"}';
+      		hasSelectArray.push(eval('(' + hasSelect + ')'));
+      	}
+        var ms1 = $('#ms1').magicSuggest({
+          data: [{id: '0', value: '连衣裙'},{id: '1', value: '小黑裙'},{id: '2', value: '衬衣'},{id: '3', value: '打底'},{id: '4', value: '小西装'},{id: '5', value: '半裙'},{id: '6', value: '开衫'},{id: '7', value: '裤子'},{id: '8', value: '大衣'},{id: '9', value: '运动服'},{id: '10', value: '围巾'},{id: '11', value: '鞋子'},{id: '12', value: '皮包'},{id: '13', value: '帽子'},{id: '14', value: '手套'},{id: '15', value: '腰带'},{id: '16', value: '眼镜'},{id: '17', value: '配饰'},{id: '18', value: '香水'},{id: '19', value: '护肤'},{id: '20', value: '彩妆'},{id: '21', value: '药品'}],
+          allowFreeEntries: 'false',
+          maxSelection: 5,
+          placeholder: 'Click here',
+          value: hasSelectArray,
+          renderer: function(data) {
+          	return '<input type="hidden">' + data.value + '</input>' + '<li role="separator" class="divider"></li>'
+          },
+          selectionRenderer: function(data) {
+          	return '<input name="tags" type="hidden" value="' + data.id + '-' + data.value  + '">' + data.value + '</input>';
+          }
+        });
+      });
+    </script>
+<%- include chun_footer %>

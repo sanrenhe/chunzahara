@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>chunzahara</title>
+    <link href="/stylesheets/chunzahara/css/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/chunzahara/css/slidefolio.css" rel="stylesheet">
+    <link href="/stylesheets/chunzahara/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <script src="/stylesheets/chunzahara/js/jquery.js"></script>
+</head>
+<body>
+    <div id="nav">
+        <nav class="navbar navbar-new" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mobilemenu">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand">chunzahara</a>
+                </div>
+                <div class="collapse navbar-collapse" id="mobilemenu">
+                    <ul class="nav navbar-nav navbar-right text-center">
+                        <li><a href="/"><i class="service-icon fa fa-home"></i>&nbsp;Home</a></li>
+                        <li><a href="/chun_beautiful"><i class="service-icon fa fa-info"></i>&nbsp;Beautiful</a></li>
+                        <li><a href="/chun_select"><i class="service-icon fa fa-laptop"></i>&nbsp;Feilei</a></li>
+                        <li><a href="/chun_upload"><i class="service-icon fa fa-camera"></i>&nbsp;Upload</a></li>
+                        <% if(user) { %>
+						<li><a href="/chun_logout"><i class="service-icon fa fa-envelope"></i>&nbsp;Logout</a></li>
+                        <% } else { %>
+                        <li><a href="/chun_login"><i class="service-icon fa fa-envelope"></i>&nbsp;Login</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
